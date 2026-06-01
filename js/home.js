@@ -15,23 +15,28 @@ const diffDays =
 Math.floor(
   (today - startDate) /
   (1000 * 60 * 60 * 24)
-) + 1;
+) + 2;
 
 document.getElementById('dday')
 .textContent = `D+${diffDays}`;
 
-if(localStorage.getItem('theme')==='dark'){
- document.body.classList.add('dark');
-}
+themeBtn.onclick = ()=>{
 
-const themeBtn =
-document.getElementById('themeToggle');
+  document.body.classList.toggle('dark');
 
-if(localStorage.getItem('theme')==='dark'){
- document.body.classList.add('dark');
- themeBtn.textContent='☀️';
-}else{
- themeBtn.textContent='🌙';
+  const isDark =
+  document.body.classList.contains('dark');
+
+  localStorage.setItem(
+    'theme',
+    isDark ? 'dark' : 'light'
+  );
+
+  themeBtn.textContent =
+    isDark
+    ? '☀️'
+    : '🌙';
+
 };
 
 document.getElementById('logoutBtn').onclick=async()=>{

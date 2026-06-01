@@ -14,6 +14,7 @@ const editLinkEl = document.getElementById('editMemoryLink');
 const routeListEl = document.getElementById('viewRouteList');
 const routeEmptyEl = document.getElementById('viewRouteEmpty');
 const routeMapLinkEl = document.getElementById('viewRouteMapLink');
+const deleteBtn = document.getElementById('deleteMemory');
 
 function escapeHtml(value) {
   return String(value || '')
@@ -103,6 +104,54 @@ async function loadRoutes(id) {
   }
 }
 
+async function deleteMemory(){
+
+  if(!memoryId){
+    return;
+  }
+
+  const confirmed =
+  confirm(
+    '정말 삭제할까요?'
+  );
+
+  if(!confirmed){
+    return;
+  }
+
+  try{
+
+    const { error } =
+    await supabase
+    .from('memories')
+    .delete()
+    .eq('id', memoryId);
+
+    if(error){
+      throw error;
+    }
+
+    localStorage.removeItem(
+      `memory-routes:${memoryId}`
+    );
+
+    alert('삭제되었습니다.');
+
+    location.href =
+    'calendar.html';
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      error.message
+    );
+
+  }
+
+}
+
 async function loadMemory() {
   if (!memoryId) {
     location.href = 'calendar.html';
@@ -147,6 +196,16 @@ async function loadMemory() {
 
   const routes = await loadRoutes(memoryId);
   renderRoutes(routes);
+
+  deleteBtn.addEventListener(
+  'click',
+  (event)=>{
+
+      event.preventDefault();
+
+      deleteMemory();
+
+  });
 }
 
 loadMemory();
