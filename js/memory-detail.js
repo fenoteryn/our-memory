@@ -103,3 +103,14 @@ document.getElementById('saveBtn').onclick = async () => {
 
  location.href='calendar.html';
 };
+
+let rating = 5;
+
+document
+.querySelectorAll('#ratingWrap span')
+.forEach(star=>{
+  star.onclick = ()=>{
+    rating = Number(star.dataset.rate);
+  };
+
+});

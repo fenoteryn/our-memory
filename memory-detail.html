@@ -9,27 +9,34 @@
 </head>
 <body>
 
-<h1>❤️ 데이트 기록</h1>
+<div class="memory-card">
 
-<input id="title" placeholder="제목">
-<input id="place" placeholder="장소">
+<input id="title" placeholder="데이트 제목">
 
-<select id="rating">
-<option value="5">⭐⭐⭐⭐⭐</option>
-<option value="4">⭐⭐⭐⭐</option>
-<option value="3">⭐⭐⭐</option>
-<option value="2">⭐⭐</option>
-<option value="1">⭐</option>
-</select>
+<div class="memory-meta">
+  <input id="place" placeholder="장소">
+</div>
 
-<textarea id="content" placeholder="데이트 기록"></textarea>
+<div id="ratingWrap">
+  <span data-rate="1">⭐</span>
+  <span data-rate="2">⭐</span>
+  <span data-rate="3">⭐</span>
+  <span data-rate="4">⭐</span>
+  <span data-rate="5">⭐</span>
+</div>
 
-<input type="file" id="photos" multiple>
+<textarea id="content" placeholder="오늘의 데이트 기록"></textarea>
+
+<label class="photo-upload">
+📷 사진 추가
+<input type="file" id="photos" multiple hidden>
+</label>
 
 <button id="saveBtn">저장</button>
 
-<h2>사진</h2>
 <div id="photoList"></div>
+
+</div>
 
 </body>
 <script type="module" src="js/memory-detail.js"></script>
