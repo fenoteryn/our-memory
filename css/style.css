@@ -1,4 +1,4 @@
-@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Ssurround.woff');
+@import url('https://cdn.jsdelivr.net/gh/projectnoonnu/2604-1@1.0/Roundandround-Bold.woff2');
 
 *{
     box-sizing:border-box;
@@ -12,7 +12,7 @@
 h1,
 h2,
 .hero-card h1{
-    font-family:'Cafe24Ssurround';
+    font-family:'RoundedKimGyuri';
 }
 
 :root{
