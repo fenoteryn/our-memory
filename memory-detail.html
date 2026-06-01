@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>데이트 기록</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="module" src="js/auth.js"></script>
+</head>
+<body>
+
+<h1>❤️ 데이트 기록</h1>
+
+<input id="title" placeholder="제목">
+<input id="place" placeholder="장소">
+
+<select id="rating">
+<option value="5">⭐⭐⭐⭐⭐</option>
+<option value="4">⭐⭐⭐⭐</option>
+<option value="3">⭐⭐⭐</option>
+<option value="2">⭐⭐</option>
+<option value="1">⭐</option>
+</select>
+
+<textarea id="content" placeholder="데이트 기록"></textarea>
+
+<input type="file" id="photos" multiple>
+
+<button id="saveBtn">저장</button>
+
+<h2>사진</h2>
+<div id="photoList"></div>
+
+</body>
+<script type="module" src="js/memory-detail.js"></script>
+</html>

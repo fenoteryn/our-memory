@@ -6,8 +6,15 @@ const calendarEl = document.getElementById('calendar');
 const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     locale: 'ko',
-    dateClick(info) {
-        openModal(info.dateStr);
+    dateClick(info){
+        location.href =
+        'memory-detail.html?date='
+        + info.dateStr;
+    },
+    eventClick(info){
+        location.href =
+        'memory-detail.html?id='
+        + info.event.id;
     }
 });
 
