@@ -3,7 +3,7 @@ import { supabase } from './supabase.js';
 
 const { data } = await supabase
     .from('anniversaries')
-    .select('target_date')
+    .select('*')
     .eq('title', '연애 시작')
     .single();
 
