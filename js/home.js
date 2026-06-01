@@ -11,11 +11,7 @@ const startDate = new Date(data.target_date);
 
 const today = new Date();
 
-const diffDays =
-Math.floor(
-    (today - startDate)
-    / (1000 * 60 * 60 * 24)
-) + 1;
+const diffDays = (today - startDate) + 1;
 
 document.getElementById('dday')
 .textContent = `D+${diffDays}`;
@@ -24,10 +20,14 @@ if(localStorage.getItem('theme')==='dark'){
  document.body.classList.add('dark');
 }
 
-document.getElementById('themeToggle').onclick=()=>{
- document.body.classList.toggle('dark');
- localStorage.setItem('theme',
- document.body.classList.contains('dark')?'dark':'light');
+const themeBtn =
+document.getElementById('themeToggle');
+
+if(localStorage.getItem('theme')==='dark'){
+ document.body.classList.add('dark');
+ themeBtn.textContent='☀️';
+}else{
+ themeBtn.textContent='🌙';
 };
 
 document.getElementById('logoutBtn').onclick=async()=>{
