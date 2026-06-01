@@ -4,7 +4,7 @@ import { supabase } from './supabase.js';
 const { data } = await supabase
     .from('anniversaries')
     .select('*')
-    .eq('title', '연애 시작')
+    .eq('id', 1)
     .single();
 
 const startDate = new Date(data.target_date);
