@@ -20,6 +20,8 @@ Math.floor(
 document.getElementById('dday')
 .textContent = `D+${diffDays}`;
 
+const themeBtn = document.getElementById('themeToggle');
+
 themeBtn.onclick = ()=>{
 
   document.body.classList.toggle('dark');
