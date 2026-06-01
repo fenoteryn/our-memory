@@ -11,7 +11,11 @@ const startDate = new Date(data.target_date);
 
 const today = new Date();
 
-const diffDays = (today - startDate) + 1;
+const diffDays =
+Math.floor(
+  (today - startDate) /
+  (1000 * 60 * 60 * 24)
+) + 1;
 
 document.getElementById('dday')
 .textContent = `D+${diffDays}`;
