@@ -633,6 +633,143 @@ header,
   gap: 10px;
 }
 
+.route-section {
+  margin: 22px 0 6px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background:
+    linear-gradient(145deg, rgba(255, 246, 231, 0.74), rgba(255, 227, 239, 0.44)),
+    rgba(255, 255, 255, 0.64);
+}
+
+.route-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.route-heading h2 {
+  font-size: 21px;
+}
+
+.route-map-link {
+  white-space: nowrap;
+}
+
+.route-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.route-form input {
+  margin-top: 0;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.route-form button {
+  min-height: 48px;
+}
+
+.route-hint,
+.route-empty {
+  margin-top: 10px;
+  color: var(--subtext);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.route-empty[hidden] {
+  display: none;
+}
+
+.route-list {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.route-list::before {
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  left: 17px;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--secondary-deep));
+  content: "";
+}
+
+.route-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px 1fr 34px;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow-soft);
+}
+
+.route-number {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--secondary-deep));
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.route-content {
+  min-width: 0;
+}
+
+.route-content strong,
+.route-content a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route-content strong {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.route-content a {
+  margin-top: 2px;
+  color: var(--secondary-deep);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.route-remove {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  background: var(--field);
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  box-shadow: none;
+}
+
 .photo-upload {
   display: flex;
   align-items: center;

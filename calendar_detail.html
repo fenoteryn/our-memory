@@ -23,10 +23,30 @@
 
   <div class="memory-meta">
     <div>
-      <label class="field-label" for="place">장소</label>
-      <input id="place" placeholder="함께 간 장소">
+      <label class="field-label" for="place">대표 장소</label>
+      <input id="place" placeholder="함께 간 대표 장소">
     </div>
   </div>
+
+  <section class="route-section" aria-labelledby="routeTitle">
+    <div class="route-heading">
+      <div>
+        <p class="page-kicker">Route</p>
+        <h2 id="routeTitle">하루 경로</h2>
+      </div>
+      <a id="routeMapLink" class="text-link route-map-link" href="https://map.kakao.com" target="_blank" rel="noopener">카카오맵</a>
+    </div>
+
+    <div class="route-form">
+      <input id="routePlace" placeholder="지나온 장소 이름">
+      <input id="routeUrl" placeholder="카카오맵 URL 또는 장소 URL">
+      <button type="button" id="addRouteBtn">경로 추가</button>
+    </div>
+
+    <p class="route-hint">URL을 비워두면 장소명으로 카카오맵 검색 링크가 자동 연결됩니다.</p>
+    <ol id="routeList" class="route-list"></ol>
+    <p id="routeEmpty" class="route-empty">아직 추가된 경로가 없습니다.</p>
+  </section>
 
   <label class="field-label">기분</label>
   <input type="hidden" id="rating" value="5">

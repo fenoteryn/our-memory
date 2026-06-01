@@ -14,6 +14,14 @@ const selectedFilesEl = document.getElementById('selectedFiles');
 const saveBtn = document.getElementById('saveBtn');
 const messageEl = document.getElementById('formMessage');
 const dateLabelEl = document.getElementById('memoryDateLabel');
+const routePlaceEl = document.getElementById('routePlace');
+const routeUrlEl = document.getElementById('routeUrl');
+const addRouteBtn = document.getElementById('addRouteBtn');
+const routeListEl = document.getElementById('routeList');
+const routeEmptyEl = document.getElementById('routeEmpty');
+const routeMapLinkEl = document.getElementById('routeMapLink');
+
+let routeItems = [];
 
 function setMessage(message, type = '') {
   if (!messageEl) return;
@@ -35,6 +43,52 @@ function formatDateLabel(dateText) {
   });
 }
 
+function escapeHtml(value) {
+  return String(value || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function normalizeUrl(url) {
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+}
+
+function kakaoPlaceUrl(place) {
+  return `https://map.kakao.com/link/search/${encodeURIComponent(place)}`;
+}
+
+function kakaoRouteUrl(items) {
+  if (items.length < 2) {
+    return items[0]?.url || kakaoPlaceUrl(items[0]?.place || '카카오맵');
+  }
+
+  const start = encodeURIComponent(items[0].place);
+  const end = encodeURIComponent(items[items.length - 1].place);
+  return `https://map.kakao.com/?sName=${start}&eName=${end}`;
+}
+
+function routeStorageKey(id = memoryId) {
+  return id ? `memory-routes:${id}` : `memory-routes:date:${memoryDate || 'draft'}`;
+}
+
+function saveRoutesToLocal(id = memoryId) {
+  localStorage.setItem(routeStorageKey(id), JSON.stringify(routeItems));
+}
+
+function readLocalRoutes(id = memoryId) {
+  try {
+    return JSON.parse(localStorage.getItem(routeStorageKey(id)) || '[]');
+  } catch {
+    return [];
+  }
+}
+
 function setRating(value) {
   const rating = Number(value) || 5;
   ratingEl.value = String(rating);
@@ -48,8 +102,53 @@ function renderSelectedFiles() {
   const files = Array.from(photosEl.files || []);
 
   selectedFilesEl.innerHTML = files.map((file) => (
-    `<span>${file.name}</span>`
+    `<span>${escapeHtml(file.name)}</span>`
   )).join('');
+}
+
+function renderRoutes() {
+  routeEmptyEl.hidden = routeItems.length > 0;
+  routeListEl.innerHTML = routeItems.map((item, index) => `
+    <li class="route-item">
+      <span class="route-number">${index + 1}</span>
+      <div class="route-content">
+        <strong>${escapeHtml(item.place)}</strong>
+        <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">카카오맵에서 보기</a>
+      </div>
+      <button type="button" class="route-remove" data-index="${index}" aria-label="경로 삭제">×</button>
+    </li>
+  `).join('');
+
+  if (routeItems.length) {
+    routeMapLinkEl.href = kakaoRouteUrl(routeItems);
+    routeMapLinkEl.textContent = routeItems.length > 1 ? '전체 경로' : '카카오맵';
+  } else {
+    routeMapLinkEl.href = 'https://map.kakao.com';
+    routeMapLinkEl.textContent = '카카오맵';
+  }
+
+  saveRoutesToLocal();
+}
+
+function addRouteItem() {
+  const place = routePlaceEl.value.trim();
+  const customUrl = normalizeUrl(routeUrlEl.value);
+
+  if (!place) {
+    setMessage('경로에 추가할 장소명을 입력해 주세요.', 'error');
+    routePlaceEl.focus();
+    return;
+  }
+
+  routeItems.push({
+    place,
+    url: customUrl || kakaoPlaceUrl(place)
+  });
+
+  routePlaceEl.value = '';
+  routeUrlEl.value = '';
+  setMessage('');
+  renderRoutes();
 }
 
 async function loadPhotos(id) {
@@ -65,13 +164,30 @@ async function loadPhotos(id) {
   }
 
   photoListEl.innerHTML = (data || []).map((photo) => (
-    `<img src="${photo.photo_url}" alt="업로드한 데이트 사진">`
+    `<img src="${escapeHtml(photo.photo_url)}" alt="업로드한 데이트 사진">`
   )).join('');
+}
+
+async function loadRoutesFromSupabase(id) {
+  const { data, error } = await supabase
+    .from('memory_routes')
+    .select('place,map_url,sort_order')
+    .eq('memory_id', id)
+    .order('sort_order', { ascending: true });
+
+  if (error) throw error;
+
+  return (data || []).map((item) => ({
+    place: item.place,
+    url: item.map_url || kakaoPlaceUrl(item.place)
+  }));
 }
 
 async function loadMemory() {
   if (!memoryId) {
     dateLabelEl.textContent = formatDateLabel(memoryDate);
+    routeItems = readLocalRoutes();
+    renderRoutes();
     return;
   }
 
@@ -95,6 +211,19 @@ async function loadMemory() {
   contentEl.value = data.content || '';
   setRating(data.rating || 5);
 
+  routeItems = readLocalRoutes();
+
+  try {
+    const remoteRoutes = await loadRoutesFromSupabase(memoryId);
+    if (remoteRoutes.length) {
+      routeItems = remoteRoutes;
+      saveRoutesToLocal();
+    }
+  } catch (routeError) {
+    console.warn('memory_routes table is unavailable. Using local route data.', routeError);
+  }
+
+  renderRoutes();
   await loadPhotos(memoryId);
 }
 
@@ -134,6 +263,35 @@ async function uploadPhotos(userId, memoryRecordId) {
       });
 
     if (insertError) throw insertError;
+  }
+}
+
+async function syncRoutesToSupabase(userId, memoryRecordId) {
+  saveRoutesToLocal(memoryRecordId);
+
+  try {
+    await supabase
+      .from('memory_routes')
+      .delete()
+      .eq('memory_id', memoryRecordId);
+
+    if (!routeItems.length) return;
+
+    const rows = routeItems.map((item, index) => ({
+      memory_id: memoryRecordId,
+      user_id: userId,
+      place: item.place,
+      map_url: item.url,
+      sort_order: index + 1
+    }));
+
+    const { error } = await supabase
+      .from('memory_routes')
+      .insert(rows);
+
+    if (error) throw error;
+  } catch (routeError) {
+    console.warn('Route data was saved locally only.', routeError);
   }
 }
 
@@ -177,6 +335,7 @@ async function saveMemory() {
       currentMemoryId = data.id;
     }
 
+    await syncRoutesToSupabase(userData.user.id, currentMemoryId);
     await uploadPhotos(userData.user.id, currentMemoryId);
 
     setMessage('저장되었습니다.', 'success');
@@ -194,6 +353,22 @@ document.querySelectorAll('#ratingWrap .rating-star').forEach((star) => {
   star.addEventListener('click', () => {
     setRating(star.dataset.rate);
   });
+});
+
+routeListEl.addEventListener('click', (event) => {
+  const removeBtn = event.target.closest('.route-remove');
+  if (!removeBtn) return;
+
+  routeItems.splice(Number(removeBtn.dataset.index), 1);
+  renderRoutes();
+});
+
+addRouteBtn.addEventListener('click', addRouteItem);
+routePlaceEl.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    addRouteItem();
+  }
 });
 
 photosEl.addEventListener('change', renderSelectedFiles);
