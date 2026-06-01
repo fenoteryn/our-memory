@@ -7,7 +7,6 @@ let memoryDate = params.get('date');
 const titleEl = document.getElementById('title');
 const placeEl = document.getElementById('place');
 const contentEl = document.getElementById('content');
-const ratingEl = document.getElementById('rating');
 const photosEl = document.getElementById('photos');
 const photoListEl = document.getElementById('photoList');
 const selectedFilesEl = document.getElementById('selectedFiles');
@@ -87,15 +86,6 @@ function readLocalRoutes(id = memoryId) {
   } catch {
     return [];
   }
-}
-
-function setRating(value) {
-  const rating = Number(value) || 5;
-  ratingEl.value = String(rating);
-
-  document.querySelectorAll('#ratingWrap .rating-star').forEach((star) => {
-    star.classList.toggle('active', Number(star.dataset.rate) <= rating);
-  });
 }
 
 function renderSelectedFiles() {
@@ -315,7 +305,6 @@ async function saveMemory() {
       title: titleEl.value.trim(),
       place: placeEl.value.trim(),
       content: contentEl.value.trim(),
-      rating: Number(ratingEl.value),
       memory_date: memoryDate
     };
 
@@ -378,5 +367,4 @@ routePlaceEl.addEventListener('keydown', (event) => {
 photosEl.addEventListener('change', renderSelectedFiles);
 saveBtn.addEventListener('click', saveMemory);
 
-setRating(ratingEl.value);
 loadMemory();
