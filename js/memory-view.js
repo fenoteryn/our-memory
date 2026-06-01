@@ -6,7 +6,6 @@ const memoryId = params.get('id');
 const dateLabelEl = document.getElementById('viewDateLabel');
 const titleEl = document.getElementById('viewTitle');
 const placeEl = document.getElementById('viewPlace');
-const ratingEl = document.getElementById('viewRating');
 const contentEl = document.getElementById('viewContent');
 const photoListEl = document.getElementById('viewPhotoList');
 const heroEl = document.getElementById('viewHero');
@@ -59,11 +58,6 @@ function readLocalRoutes(id) {
   } catch {
     return [];
   }
-}
-
-function renderRating(rating) {
-  const count = Number(rating) || 0;
-  ratingEl.textContent = '★'.repeat(count) || '별점 없음';
 }
 
 function renderRoutes(routes) {
@@ -188,7 +182,6 @@ async function loadMemory() {
   placeEl.textContent = memory.place || '장소 미입력';
   contentEl.textContent = memory.content || '기록이 없습니다.';
   editLinkEl.href = `calendar_detail.html?id=${memory.id}`;
-  renderRating(memory.rating || memory.stars || 0);
 
   photoListEl.innerHTML = (photos || []).map((photo) => (
     `<img src="${escapeHtml(photo.photo_url)}" alt="데이트 사진">`
