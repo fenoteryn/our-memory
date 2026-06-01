@@ -237,6 +237,7 @@ function makeStoragePath(userId, memoryRecordId, file) {
 
 async function uploadPhotos(userId, memoryRecordId) {
   const files = Array.from(photosEl.files || []);
+  const uploadedUrls = [];
 
   for (const file of files) {
     const filePath = makeStoragePath(userId, memoryRecordId, file);
@@ -263,7 +264,10 @@ async function uploadPhotos(userId, memoryRecordId) {
       });
 
     if (insertError) throw insertError;
+    uploadedUrls.push(urlData.publicUrl);
   }
+
+  return uploadedUrls;
 }
 
 async function syncRoutesToSupabase(userId, memoryRecordId) {

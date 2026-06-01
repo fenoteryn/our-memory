@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>데이트 상세</title>
+<link rel="stylesheet" href="css/style.css">
+<script type="module" src="js/auth.js"></script>
+</head>
+<body>
+
+<header class="top-header">
+  <div>
+    <p class="page-kicker" id="viewDateLabel">데이트 상세</p>
+    <h1 id="viewTitle">오늘의 기억</h1>
+  </div>
+  <a class="text-link" id="editMemoryLink" href="calendar.html">수정</a>
+</header>
+
+<main class="memory-view">
+  <section class="view-hero" id="viewHero">
+    <div>
+      <p id="viewPlace">장소 미입력</p>
+      <div id="viewRating" class="view-rating"></div>
+    </div>
+  </section>
+
+  <section class="view-section">
+    <p class="page-kicker">Route</p>
+    <div class="route-heading view-route-heading">
+      <h2>하루 경로</h2>
+      <a id="viewRouteMapLink" class="text-link route-map-link" href="https://map.kakao.com" target="_blank" rel="noopener">카카오맵</a>
+    </div>
+    <ol id="viewRouteList" class="route-list"></ol>
+    <p id="viewRouteEmpty" class="route-empty">기록된 경로가 없습니다.</p>
+  </section>
+
+  <section class="view-section">
+    <p class="page-kicker">Memo</p>
+    <p id="viewContent" class="view-content">기록이 없습니다.</p>
+  </section>
+
+  <section class="view-section">
+    <p class="page-kicker">Photos</p>
+    <div id="viewPhotoList" class="photo-list"></div>
+  </section>
+</main>
+
+<nav class="bottom-nav">
+  <a href="index.html">홈</a>
+  <a class="active" href="calendar.html">캘린더</a>
+</nav>
+
+<script type="module" src="js/memory-view.js"></script>
+</body>
+</html>
