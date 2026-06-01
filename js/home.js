@@ -1,10 +1,24 @@
 
 import { supabase } from './supabase.js';
 
-const startDate = new Date('2025-03-01');
+const { data } = await supabase
+    .from('anniversaries')
+    .select('target_date')
+    .eq('title', '연애 시작')
+    .single();
 
-const diff=Math.floor((new Date()-startDate)/(1000*60*60*24))+1;
-document.getElementById('dday').textContent=`D+${diff}`;
+const startDate = new Date(data.target_date);
+
+const today = new Date();
+
+const diffDays =
+Math.floor(
+    (today - startDate)
+    / (1000 * 60 * 60 * 24)
+) + 1;
+
+document.getElementById('dday')
+.textContent = `D+${diffDays}`;
 
 if(localStorage.getItem('theme')==='dark'){
  document.body.classList.add('dark');
