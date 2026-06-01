@@ -9,6 +9,12 @@
     sans-serif;
 }
 
+h1,
+h2,
+.hero-card h1{
+    font-family:'Cafe24Ssurround';
+}
+
 :root{
     --primary:#FFF6E7;
     --secondary:#E5E0F0;
@@ -52,21 +58,9 @@ body{
 
     padding:20px;
     padding-bottom:100px;
-    font-family:
-    'Pretendard',
-    sans-serif;
 }
 
 /* 공통 */
-
-h1,
-h2,
-.hero-card{
-
-    font-family:
-    'Cafe24Ssurround';
-}
-
 
 h1{
     font-size:28px;
