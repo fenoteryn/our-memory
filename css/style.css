@@ -217,6 +217,10 @@ a:hover{
     margin-bottom:20px;
 }
 
+.login-card button{
+    margin-top: 10px;
+}
+
 .hero-card{
 
     background:
