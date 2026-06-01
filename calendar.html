@@ -12,21 +12,24 @@
 
 <script type="module" src="js/auth.js"></script>
 </head>
-<body>
+<body class="calendar-page">
 
-<h1>📅 데이트 캘린더</h1>
+<header class="top-header calendar-header">
+  <div>
+    <p class="page-kicker">Our Memory</p>
+    <h1>데이트 캘린더</h1>
+  </div>
+</header>
 
-<div id="calendar"></div>
+<main class="calendar-shell">
+  <div id="calendar"></div>
+</main>
 
 <nav class="bottom-nav">
-<a href="index.html">🏠 홈</a>
-<a href="calendar.html">📅 캘린더</a>
-<!-- <a href="#">📷 앨범</a>
-<a href="#">📍 장소</a>
-<a href="#">💌 편지</a> -->
+  <a href="index.html">홈</a>
+  <a class="active" href="calendar.html">캘린더</a>
 </nav>
 
 <script type="module" src="js/calendar.js"></script>
-
 </body>
 </html>

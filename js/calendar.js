@@ -6,26 +6,33 @@ const calendarEl = document.getElementById('calendar');
 const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     locale: 'ko',
+    height: '100%',
+    expandRows: true,
+    fixedWeekCount: true,
+    showNonCurrentDates: true,
+    dayMaxEvents: 1,
+    moreLinkText: '더보기',
+    headerToolbar: {
+        left: 'prev',
+        center: 'title',
+        right: 'next'
+    },
+    buttonText: {
+        today: '오늘'
+    },
     dateClick(info){
         location.href =
-        'memory-detail.html?date='
+        'calendar_detail.html?date='
         + info.dateStr;
     },
     eventClick(info){
         location.href =
-        'memory-detail.html?id='
+        'calendar_detail.html?id='
         + info.event.id;
     }
 });
 
 calendar.render();
-
-let selectedDate = null;
-
-function openModal(date){
-    selectedDate = date;
-    document.getElementById('memoryModal').style.display = 'block';
-}
 
 async function loadEvents(){
     const { data, error } = await supabase
@@ -48,25 +55,3 @@ async function loadEvents(){
 }
 
 loadEvents();
-
-document.getElementById('saveBtn').onclick = async () => {
-
-    const { data:userData } = await supabase.auth.getUser();
-
-    const { error } = await supabase
-        .from('memories')
-        .insert({
-            user_id: userData.user.id,
-            title: document.getElementById('title').value,
-            place: document.getElementById('place').value,
-            content: document.getElementById('content').value,
-            memory_date: selectedDate
-        });
-
-    if(error){
-        alert(error.message);
-        return;
-    }
-
-    location.reload();
-};

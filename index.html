@@ -10,32 +10,25 @@
 </head>
 <body>
 <header>
-<div class="header-actions">
-
-<button id="themeToggle">
-🌙
-</button>
-
-<button id="logoutBtn">
-로그아웃
-</button>
-
-</div>
+  <div class="header-actions">
+    <button id="themeToggle">테마</button>
+    <button id="logoutBtn">로그아웃</button>
+  </div>
 </header>
-<div class="hero-card">
-    <h1 id="dday">
-        D+429
-    </h1>
+
+<main>
+  <section class="hero-card">
+    <p>우리가 함께한 시간</p>
+    <h1 id="dday">D+0</h1>
     <ul id="anniversaryList"></ul>
-</div>
-<div id="stats"></div>
+  </section>
+
+  <div id="stats"></div>
+</main>
 
 <nav class="bottom-nav">
-<a href="index.html">🏠 홈</a>
-<a href="calendar.html">📅 캘린더</a>
-<!-- <a href="gallery.html">📷 앨범</a>
-<a href="places.html">📍 장소</a>
-<a href="letters.html">💌 편지</a> -->
+  <a class="active" href="index.html">홈</a>
+  <a href="calendar.html">캘린더</a>
 </nav>
 
 <script type="module" src="js/home.js"></script>

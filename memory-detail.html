@@ -4,62 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>데이트 기록</title>
-<link rel="stylesheet" href="css/style.css">
-<script type="module" src="js/auth.js"></script>
+<script>
+  const query = window.location.search || '';
+  window.location.replace(`calendar_detail.html${query}`);
+</script>
 </head>
 <body>
-
-<div class="memory-card">
-
-<input id="title" placeholder="데이트 제목">
-
-<div class="memory-meta">
-  <input id="place" placeholder="장소">
-</div>
-
-<div id="ratingWrap">
-  <span data-rate="1">⭐</span>
-  <span data-rate="2">⭐</span>
-  <span data-rate="3">⭐</span>
-  <span data-rate="4">⭐</span>
-  <span data-rate="5">⭐</span>
-</div>
-
-<textarea id="content" placeholder="오늘의 데이트 기록"></textarea>
-
-<label class="photo-upload">
-📷 사진 추가
-<input type="file" id="photos" multiple hidden>
-</label>
-
-<button id="saveBtn">저장</button>
-
-<div class="emoji-bar">
-<button class="emoji-btn">🥰</button>
-<button class="emoji-btn">😍</button>
-<button class="emoji-btn">😂</button>
-<button class="emoji-btn">😭</button>
-</div>
-
-<div class="comment-box">
-<h3>댓글</h3>
-<textarea id="commentInput"></textarea>
-<button id="commentBtn">댓글 작성</button>
-<div id="comments"></div>
-</div>
-
-<div id="photoList"></div>
-
-</div>
-
-<nav class="bottom-nav">
-<a href="index.html">🏠 홈</a>
-<a href="calendar.html">📅 캘린더</a>
-<a href="gallery.html">📷 앨범</a>
-<a href="places.html">📍 장소</a>
-<a href="letters.html">💌 편지</a>
-</nav>
-
+  <p>데이트 기록 페이지로 이동 중입니다.</p>
 </body>
-<script type="module" src="js/memory-detail.js"></script>
 </html>
