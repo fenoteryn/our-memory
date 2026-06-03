@@ -166,6 +166,27 @@ async function deleteMemory(){
 
 }
 
+function initCarousel(el) {
+  const track = el.querySelector('.carousel-track');
+  const dots = Array.from(el.querySelectorAll('.carousel-dot'));
+  let current = 0;
+
+  function goTo(index) {
+    current = Math.max(0, Math.min(index, dots.length - 1));
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+  let startX = 0;
+  el.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  el.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
+  });
+}
+
 async function loadMemory() {
   if (!memoryId) {
     location.href = 'calendar.html';
@@ -208,11 +229,27 @@ async function loadMemory() {
   contentEl.textContent = memory.content || '기록이 없습니다.';
   editLinkEl.href = `calendar_detail.html?id=${memory.id}`;
 
-  if (photoListEl) {
-    photoListEl.innerHTML = (photos || []).map(p => {
-      const url = signed.get(p.photo_url) || '';
-      return url ? `<img src="${escapeHtml(url)}" alt="데이트 사진">` : '';
-    }).join('');
+  const photoUrls = (photos || []).map(p => signed.get(p.photo_url) || '').filter(Boolean);
+  if (photoListEl && photoUrls.length) {
+    const photoSection = document.getElementById('photoSection');
+    if (photoSection) photoSection.hidden = false;
+
+    if (photoUrls.length === 1) {
+      photoListEl.innerHTML = `<div class="photo-single"><img src="${escapeHtml(photoUrls[0])}" alt="데이트 사진"></div>`;
+    } else {
+      const slides = photoUrls.map(url =>
+        `<div class="carousel-slide"><img src="${escapeHtml(url)}" alt="데이트 사진"></div>`
+      ).join('');
+      const dots = photoUrls.map((_, i) =>
+        `<button class="carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="${i + 1}번째 사진"></button>`
+      ).join('');
+      photoListEl.innerHTML = `
+        <div class="photo-carousel">
+          <div class="carousel-track">${slides}</div>
+          <div class="carousel-dots">${dots}</div>
+        </div>`;
+      initCarousel(photoListEl.querySelector('.photo-carousel'));
+    }
   }
 
   const routes = await loadRoutes(memoryId);
