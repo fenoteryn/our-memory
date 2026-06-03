@@ -444,8 +444,6 @@ header,
 }
 
 .calendar-page {
-  height: 100vh;
-  overflow: hidden;
 }
 
 .calendar-page .calendar-header {
@@ -457,12 +455,10 @@ header,
 }
 
 .calendar-shell {
-  height: calc(100vh - var(--nav-height) - 150px);
   min-height: 0;
 }
 
 .calendar-page #calendar {
-  height: 100%;
   margin-top: 0;
 }
 
@@ -640,21 +636,6 @@ header,
   text-align: center;
 }
 
-.fc .fc-daygrid,
-.fc .fc-scrollgrid,
-.fc .fc-scroller,
-.fc .fc-daygrid-body,
-.fc .fc-daygrid-body table {
-  height: 100% !important;
-}
-
-.fc .fc-view-harness {
-  height: calc(100% - 48px) !important;
-}
-
-.fc .fc-scroller {
-  overflow: hidden !important;
-}
 
 html.dark .fc {
   background:
@@ -1378,9 +1359,6 @@ a.gallery-card {
     margin-bottom: 10px;
   }
 
-  .calendar-shell {
-    height: calc(100vh - var(--nav-height) - 118px);
-  }
 
   .hero-card {
     padding: 24px;
@@ -1422,9 +1400,6 @@ a.gallery-card {
     flex: 1 1 auto;
   }
 
-  .calendar-page .fc .fc-view-harness {
-    height: calc(100% - 42px) !important;
-  }
 
   .fc .fc-button {
     min-width: 34px !important;
