@@ -1145,18 +1145,27 @@ html.dark .route-item {
 }
 
 #galleryGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
-#galleryGrid img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  border-radius: 26px;
-  object-fit: cover;
-  box-shadow: var(--shadow-soft);
+.gallery-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gallery-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gallery-card-header strong {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
 }
 
 #placesList,
