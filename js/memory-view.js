@@ -1,5 +1,16 @@
 import { supabase } from './supabase.js';
 
+const CATEGORIES = [
+  { key: '음식점', icon: '🍽️' },
+  { key: '카페', icon: '☕' },
+  { key: '소품샵', icon: '🛍️' },
+  { key: '영화관', icon: '🎬' },
+  { key: '공원', icon: '🌿' },
+  { key: '오락실', icon: '🕹️' },
+  { key: '쇼핑몰', icon: '🏬' },
+  { key: '기타', icon: '📍' },
+];
+
 const params = new URLSearchParams(location.search);
 const memoryId = params.get('id');
 
@@ -60,19 +71,26 @@ function readLocalRoutes(id) {
   }
 }
 
-function renderRoutes(routes) {
-  routeEmptyEl.hidden = routes.length > 0;
-  routeListEl.innerHTML = routes.map((item, index) => `
-    <li class="route-item">
-      <span class="route-number">${index + 1}</span>
-      <div class="route-content">
-        <strong>${escapeHtml(item.place)}</strong>
-        <a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">카카오맵에서 보기</a>
-      </div>
-    </li>
-  `).join('');
+function categoryInfo(key) {
+  return CATEGORIES.find(c => c.key === key) ?? CATEGORIES[CATEGORIES.length - 1];
+}
 
-  if (routes.length) {
+function renderRoutes(routes) {
+  if (!routeEmptyEl || !routeListEl) return;
+  routeEmptyEl.hidden = routes.length > 0;
+  routeListEl.innerHTML = routes.map((item, index) => {
+    const cat = categoryInfo(item.category);
+    return `
+      <li class="route-item">
+        <span class="route-number">${index + 1}</span>
+        <div class="route-content">
+          <strong>${escapeHtml(item.place)}</strong>
+          <span class="route-category">${cat.icon} ${escapeHtml(cat.key)}</span>
+        </div>
+      </li>`;
+  }).join('');
+
+  if (routes.length && routeMapLinkEl) {
     routeMapLinkEl.href = kakaoRouteUrl(routes);
     routeMapLinkEl.textContent = routes.length > 1 ? '전체 경로' : '카카오맵';
   }
@@ -82,7 +100,7 @@ async function loadRoutes(id) {
   try {
     const { data, error } = await supabase
       .from('memory_routes')
-      .select('place,map_url,sort_order')
+      .select('place,map_url,sort_order,category')
       .eq('memory_id', id)
       .order('sort_order', { ascending: true });
 
@@ -90,7 +108,8 @@ async function loadRoutes(id) {
 
     return (data || []).map((item) => ({
       place: item.place,
-      url: item.map_url || kakaoPlaceUrl(item.place)
+      url: item.map_url || kakaoPlaceUrl(item.place),
+      category: item.category || '기타',
     }));
   } catch (error) {
     console.warn('memory_routes table is unavailable. Using local route data.', error);
@@ -190,14 +209,9 @@ async function loadMemory() {
   const routes = await loadRoutes(memoryId);
   renderRoutes(routes);
 
-  deleteBtn.addEventListener(
-  'click',
-  (event)=>{
-
-      event.preventDefault();
-
-      deleteMemory();
-
+  deleteBtn?.addEventListener('click', (event) => {
+    event.preventDefault();
+    deleteMemory();
   });
 }
 

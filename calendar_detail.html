@@ -23,13 +23,6 @@
   <label class="field-label" for="title">제목</label>
   <input id="title" placeholder="데이트 제목">
 
-  <!-- <div class="memory-meta">
-    <div>
-      <label class="field-label" for="place">대표 장소</label>
-      <input id="place" placeholder="함께 간 대표 장소">
-    </div>
-  </div>
-
   <section class="route-section" aria-labelledby="routeTitle">
     <div class="route-heading">
       <div>
@@ -39,25 +32,16 @@
       <a id="routeMapLink" class="text-link route-map-link" href="https://map.kakao.com" target="_blank" rel="noopener">카카오맵</a>
     </div>
 
+    <div class="category-chips" id="categoryChips" role="group" aria-label="카테고리 선택"></div>
+
     <div class="route-form">
-      <input id="routePlace" placeholder="지나온 장소 이름">
-      <input id="routeUrl" placeholder="카카오맵 URL 또는 장소 URL">
-      <button type="button" id="addRouteBtn">경로 추가</button>
+      <input id="routePlace" placeholder="장소 이름">
+      <button type="button" id="addRouteBtn">추가</button>
     </div>
 
-    <p class="route-hint">URL을 비워두면 장소명으로 카카오맵 검색 링크가 자동 연결됩니다.</p>
     <ol id="routeList" class="route-list"></ol>
     <p id="routeEmpty" class="route-empty">아직 추가된 경로가 없습니다.</p>
-  </section> -->
-<!-- 
-  <input type="hidden" id="rating" value="5">
-  <div id="ratingWrap" aria-label="기분 점수">
-    <button type="button" class="rating-star active" data-rate="1" aria-label="1점">★</button>
-    <button type="button" class="rating-star active" data-rate="2" aria-label="2점">★</button>
-    <button type="button" class="rating-star active" data-rate="3" aria-label="3점">★</button>
-    <button type="button" class="rating-star active" data-rate="4" aria-label="4점">★</button>
-    <button type="button" class="rating-star active" data-rate="5" aria-label="5점">★</button>
-  </div> -->
+  </section>
 
   <label class="field-label" for="content">기록</label>
   <textarea id="content" placeholder="오늘의 데이트 기록"></textarea>
