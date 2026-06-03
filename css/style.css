@@ -1107,12 +1107,15 @@ html.dark .route-item {
 
 .comment-form {
   display: flex;
+  align-items: center;
   gap: 8px;
   margin-top: 8px;
+  width: 100%;
 }
 
 .comment-form input {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   padding: 10px 16px;
   border-radius: 999px;
   border: 1.5px solid var(--line);
@@ -1139,6 +1142,7 @@ html.dark .route-item {
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
+  white-space: nowrap;
 }
 
 #galleryGrid {
