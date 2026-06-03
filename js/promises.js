@@ -47,8 +47,7 @@ function escapeHtml(v) {
     }).join('');
 
     el.innerHTML = `
-      <div class="card">
-        <p class="page-kicker">약속</p>
+      <div class="hero-card">
         <h2>Date Plans</h2>
         <ul class="promise-list">${items}</ul>
         <form class="promise-form" id="promiseForm">
