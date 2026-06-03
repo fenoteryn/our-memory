@@ -242,7 +242,7 @@ async function loadMemory() {
         `<div class="carousel-slide"><img src="${escapeHtml(url)}" alt="데이트 사진"></div>`
       ).join('');
       const dots = photoUrls.map((_, i) =>
-        `<button class="carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="${i + 1}번째 사진"></button>`
+        `<span class="carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}" role="button" tabindex="0" aria-label="${i + 1}번째 사진">♥</span>`
       ).join('');
       photoListEl.innerHTML = `
         <div class="photo-carousel">
