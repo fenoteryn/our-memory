@@ -598,7 +598,7 @@ header,
 
 .memory-event-card img {
   width: 100%;
-  height: 52px;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
 }
@@ -620,6 +620,7 @@ header,
 .fc .fc-daygrid-day-frame {
   min-height: 100% !important;
   padding: 2px;
+  overflow: hidden;
 }
 
 .fc .fc-daygrid-day-top {
