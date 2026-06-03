@@ -20,13 +20,28 @@ function formatDate(dateText) {
 function initCarousel(el) {
   const track = el.querySelector('.carousel-track');
   const dots = Array.from(el.querySelectorAll('.carousel-dot'));
+  const slides = Array.from(track.children);
   let current = 0;
+
+  function syncHeight(index) {
+    const img = slides[index]?.querySelector('img');
+    if (!img) return;
+    if (img.complete && img.naturalHeight) {
+      el.style.height = img.offsetHeight + 'px';
+    }
+  }
 
   function goTo(index) {
     current = Math.max(0, Math.min(index, dots.length - 1));
     track.style.transform = `translateX(-${current * 100}%)`;
     dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    syncHeight(current);
   }
+
+  slides.forEach((slide, i) => {
+    const img = slide.querySelector('img');
+    if (img) img.addEventListener('load', () => { if (i === current) syncHeight(i); });
+  });
 
   dots.forEach((dot, i) => dot.addEventListener('click', e => { e.preventDefault(); goTo(i); }));
 
@@ -36,6 +51,8 @@ function initCarousel(el) {
     const diff = startX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) { e.preventDefault(); goTo(current + (diff > 0 ? 1 : -1)); }
   });
+
+  syncHeight(0);
 }
 
 const [{ data: memories }, { data: photos, error }] = await Promise.all([

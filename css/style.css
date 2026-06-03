@@ -993,6 +993,7 @@ html.dark .route-item {
   border-radius: 24px;
   margin: 14px 0 10px;
   touch-action: pan-y;
+  transition: height 0.3s ease;
 }
 
 .carousel-track {
