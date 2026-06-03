@@ -981,9 +981,8 @@ html.dark .route-item {
 
 .photo-single img {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: auto;
   border-radius: 24px;
-  object-fit: cover;
   display: block;
   box-shadow: var(--shadow-soft);
 }
@@ -1009,19 +1008,21 @@ html.dark .route-item {
 
 .carousel-slide img {
   width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
+  height: auto;
   display: block;
 }
 
 .carousel-dots {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 6px;
   margin-top: 10px;
 }
 
 .carousel-dot {
+  appearance: none;
+  flex-shrink: 0;
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -1029,6 +1030,7 @@ html.dark .route-item {
   background: var(--line);
   cursor: pointer;
   padding: 0;
+  box-sizing: border-box;
   transition: background 0.2s, transform 0.2s;
 }
 
@@ -1052,6 +1054,91 @@ html.dark .route-item {
 
 .form-message[data-type="error"] {
   color: var(--accent);
+}
+
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.comment-item {
+  display: flex;
+  flex-direction: column;
+  max-width: 75%;
+}
+
+.comment-item.mine {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.comment-item.theirs {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.comment-bubble {
+  padding: 8px 14px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.comment-item.mine .comment-bubble {
+  background: linear-gradient(135deg, var(--accent), var(--secondary-deep));
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.comment-item.theirs .comment-bubble {
+  background: var(--secondary);
+  color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+
+.comment-time {
+  font-size: 10px;
+  color: var(--subtext);
+  margin-top: 3px;
+}
+
+.comment-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.comment-form input {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+}
+
+.comment-form input:focus {
+  border-color: var(--accent);
+}
+
+.comment-form button {
+  flex-shrink: 0;
+  padding: 0 18px;
+  height: 42px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--secondary-deep));
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
 }
 
 #galleryGrid {

@@ -1,22 +1,43 @@
-
 import { supabase } from './supabase.js';
 
-export async function loadComments(memoryId){
- const { data } = await supabase
- .from('comments')
- .select('*')
- .eq('memory_id',memoryId)
- .order('created_at');
-
- document.getElementById('comments').innerHTML =
- (data||[]).map(v=>
- `<div class="comment-item">${v.content}</div>`).join('');
+function formatTime(ts) {
+  return new Date(ts).toLocaleTimeString('ko-KR', {
+    hour: '2-digit', minute: '2-digit', hour12: true,
+  });
 }
 
-export async function saveComment(memoryId,content,userId){
- await supabase.from('comments').insert({
-  memory_id:memoryId,
-  content,
-  user_id:userId
- });
+function escapeHtml(v) {
+  return String(v || '')
+    .replaceAll('&', '&amp;').replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;').replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+export async function loadComments(memoryId, currentUserId) {
+  const { data } = await supabase
+    .from('comments')
+    .select('*')
+    .eq('memory_id', memoryId)
+    .order('created_at');
+
+  const el = document.getElementById('comments');
+  if (!el) return;
+
+  el.innerHTML = (data || []).map(c => {
+    const mine = c.user_id === currentUserId;
+    return `
+      <div class="comment-item ${mine ? 'mine' : 'theirs'}">
+        <div class="comment-bubble">${escapeHtml(c.content)}</div>
+        <span class="comment-time">${formatTime(c.created_at)}</span>
+      </div>`;
+  }).join('');
+}
+
+export async function saveComment(memoryId, content, userId) {
+  const { error } = await supabase.from('comments').insert({
+    memory_id: memoryId,
+    content,
+    user_id: userId,
+  });
+  if (error) throw error;
 }
