@@ -28,13 +28,13 @@ function initCarousel(el) {
     dots.forEach((d, i) => d.classList.toggle('active', i === current));
   }
 
-  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+  dots.forEach((dot, i) => dot.addEventListener('click', e => { e.preventDefault(); goTo(i); }));
 
   let startX = 0;
   el.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
   el.addEventListener('touchend', e => {
     const diff = startX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
+    if (Math.abs(diff) > 50) { e.preventDefault(); goTo(current + (diff > 0 ? 1 : -1)); }
   });
 }
 
@@ -70,10 +70,12 @@ if (!memoriesWithPhotos.length) {
         <strong>${escapeHtml(m.title || '데이트 기록')}</strong>
       </div>`;
 
+    const href = `calendar_view.html?id=${encodeURIComponent(m.id)}`;
+
     if (urls.length === 1) {
-      return `<div class="gallery-card">${header}
+      return `<a class="gallery-card" href="${href}">${header}
         <div class="photo-single"><img src="${escapeHtml(urls[0])}" alt="데이트 사진" loading="lazy"></div>
-      </div>`;
+      </a>`;
     }
 
     const slides = urls.map(url =>
@@ -83,12 +85,12 @@ if (!memoriesWithPhotos.length) {
       `<span class="carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}" role="button" tabindex="0" aria-label="${i + 1}번째 사진">♥</span>`
     ).join('');
 
-    return `<div class="gallery-card">${header}
+    return `<a class="gallery-card" href="${href}">${header}
       <div class="photo-carousel">
         <div class="carousel-track">${slides}</div>
         <div class="carousel-dots">${dots}</div>
       </div>
-    </div>`;
+    </a>`;
   }).join('');
 
   grid.querySelectorAll('.photo-carousel').forEach(initCarousel);

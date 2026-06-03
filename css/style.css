@@ -1118,7 +1118,7 @@ html.dark .route-item {
   border: 1.5px solid var(--line);
   background: var(--card);
   color: var(--text);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   outline: none;
   font-family: inherit;
@@ -1166,6 +1166,14 @@ html.dark .route-item {
   font-size: 16px;
   font-weight: 800;
   color: var(--text);
+}
+
+a.gallery-card {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 #placesList,
