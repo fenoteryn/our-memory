@@ -49,7 +49,7 @@ function escapeHtml(v) {
     el.innerHTML = `
       <div class="card">
         <p class="page-kicker">약속</p>
-        <h2>다가오는 날들</h2>
+        <h2>Date Plans</h2>
         <ul class="promise-list">${items}</ul>
         <form class="promise-form" id="promiseForm">
           <input type="text" id="promiseTitle" placeholder="약속 제목" autocomplete="off">
