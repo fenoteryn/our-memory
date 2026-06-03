@@ -87,7 +87,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-body.dark {
+html.dark body {
   background:
     radial-gradient(circle at top left, rgba(56, 50, 70, 0.65), transparent 32rem),
     linear-gradient(180deg, var(--bg-soft), var(--bg) 18rem);
