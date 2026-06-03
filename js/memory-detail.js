@@ -1,4 +1,5 @@
 import { supabase } from './supabase.js';
+import { signUrls } from './storage.js';
 
 const CATEGORIES = [
   { key: '음식점', icon: '🍽️' },
@@ -134,9 +135,13 @@ function addRouteItem() {
 async function loadPhotos(id) {
   const { data, error } = await supabase.from('photos').select('*').eq('memory_id', id).order('id', { ascending: false });
   if (error) { console.error(error); return; }
-  if (photoListEl) {
-    photoListEl.innerHTML = (data || []).map(p => `<img src="${escapeHtml(p.photo_url)}" alt="데이트 사진">`).join('');
-  }
+  if (!data?.length || !photoListEl) return;
+
+  const signed = await signUrls(data.map(p => p.photo_url));
+  photoListEl.innerHTML = data.map(p => {
+    const url = signed.get(p.photo_url) || '';
+    return url ? `<img src="${escapeHtml(url)}" alt="데이트 사진">` : '';
+  }).join('');
 }
 
 async function loadRoutesFromSupabase(id) {
@@ -194,8 +199,8 @@ async function uploadPhotos(userId, memId) {
     const path = makeStoragePath(userId, memId, file);
     const { error: upErr } = await supabase.storage.from('photos').upload(path, file, { cacheControl: '3600', upsert: false });
     if (upErr) throw upErr;
-    const { data: urlData } = supabase.storage.from('photos').getPublicUrl(path);
-    const { error: insErr } = await supabase.from('photos').insert({ memory_id: memId, user_id: userId, photo_url: urlData.publicUrl });
+    // path만 저장 (signed URL은 표시 시점에 생성)
+    const { error: insErr } = await supabase.from('photos').insert({ memory_id: memId, user_id: userId, photo_url: path });
     if (insErr) throw insErr;
   }
 }

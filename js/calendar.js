@@ -1,4 +1,5 @@
 import { supabase } from './supabase.js';
+import { signUrls } from './storage.js';
 
 const calendarEl = document.getElementById('calendar');
 const memoriesByDate = new Map();
@@ -101,10 +102,13 @@ async function loadEvents() {
     }
   }
 
+  const rawThumbs = (memories || []).map(m => m.thumbnail_url || photoMap.get(m.id) || '').filter(Boolean);
+  const signed = rawThumbs.length ? await signUrls(rawThumbs) : new Map();
+
   (memories || []).forEach((memory) => {
     if (memoriesByDate.has(memory.memory_date)) return;
 
-    const thumbnailUrl = memory.thumbnail_url || photoMap.get(memory.id) || '';
+    const raw = memory.thumbnail_url || photoMap.get(memory.id) || '';
     memoriesByDate.set(memory.memory_date, memory);
 
     calendar.addEvent({
@@ -113,7 +117,7 @@ async function loadEvents() {
       start: memory.memory_date,
       allDay: true,
       extendedProps: {
-        thumbnailUrl
+        thumbnailUrl: raw ? (signed.get(raw) || '') : ''
       }
     });
   });

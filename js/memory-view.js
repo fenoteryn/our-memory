@@ -1,4 +1,5 @@
 import { supabase } from './supabase.js';
+import { signUrls } from './storage.js';
 
 const CATEGORIES = [
   { key: '음식점', icon: '🍽️' },
@@ -190,21 +191,29 @@ async function loadMemory() {
 
   if (photoError) console.error(photoError);
 
-  const firstPhoto = memory.thumbnail_url || photos?.[0]?.photo_url || '';
-  if (firstPhoto) {
-    heroEl.style.backgroundImage = `linear-gradient(180deg, rgba(46, 46, 46, 0.08), rgba(46, 46, 46, 0.58)), url("${firstPhoto}")`;
+  const rawPaths = (photos || []).map(p => p.photo_url).filter(Boolean);
+  const rawThumb = memory.thumbnail_url || photos?.[0]?.photo_url || '';
+  const allPaths = rawThumb ? [rawThumb, ...rawPaths] : rawPaths;
+  const signed = allPaths.length ? await signUrls(allPaths) : new Map();
+
+  const thumbUrl = rawThumb ? (signed.get(rawThumb) || '') : '';
+  if (thumbUrl && heroEl) {
+    heroEl.style.backgroundImage = `linear-gradient(180deg, rgba(46, 46, 46, 0.08), rgba(46, 46, 46, 0.58)), url("${thumbUrl}")`;
     heroEl.classList.add('has-photo');
   }
 
   dateLabelEl.textContent = formatDateLabel(memory.memory_date);
   titleEl.textContent = memory.title || '데이트 기록';
-  placeEl.textContent = memory.place || '장소 미입력';
+  if (placeEl) placeEl.textContent = memory.place || '장소 미입력';
   contentEl.textContent = memory.content || '기록이 없습니다.';
   editLinkEl.href = `calendar_detail.html?id=${memory.id}`;
 
-  photoListEl.innerHTML = (photos || []).map((photo) => (
-    `<img src="${escapeHtml(photo.photo_url)}" alt="데이트 사진">`
-  )).join('');
+  if (photoListEl) {
+    photoListEl.innerHTML = (photos || []).map(p => {
+      const url = signed.get(p.photo_url) || '';
+      return url ? `<img src="${escapeHtml(url)}" alt="데이트 사진">` : '';
+    }).join('');
+  }
 
   const routes = await loadRoutes(memoryId);
   renderRoutes(routes);
