@@ -1,6 +1,6 @@
 import { supabase } from './supabase.js';
 import { signUrls } from './storage.js';
-import { loadComments, saveComment } from './comments.js';
+import { loadComments, saveComment, deleteComment } from './comments.js';
 
 const CATEGORIES = [
   { key: '음식점', icon: '🍽️' },
@@ -287,6 +287,8 @@ async function loadMemory() {
 
     const commentForm = document.getElementById('commentForm');
     const commentInput = document.getElementById('commentInput');
+    const commentsEl = document.getElementById('comments');
+
     commentForm?.addEventListener('submit', async e => {
       e.preventDefault();
       const text = commentInput.value.trim();
@@ -294,6 +296,17 @@ async function loadMemory() {
       commentInput.value = '';
       try {
         await saveComment(memoryId, text, user.id);
+        await loadComments(memoryId, user.id);
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    commentsEl?.addEventListener('click', async e => {
+      const btn = e.target.closest('.comment-delete');
+      if (!btn) return;
+      try {
+        await deleteComment(btn.dataset.id);
         await loadComments(memoryId, user.id);
       } catch (err) {
         console.error(err);
