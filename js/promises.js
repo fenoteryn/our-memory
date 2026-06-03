@@ -20,35 +20,34 @@ function escapeHtml(v) {
     .replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
 }
 
-const { data, error } = await supabase
-  .from('anniversaries')
-  .select('*')
-  .eq('type', 1)
-  .order('target_date', { ascending: true });
+(async () => {
+  const el = document.getElementById('promises');
+  if (!el) return;
 
-const el = document.getElementById('promises');
-if (!el) return;
+  const { data, error } = await supabase
+    .from('anniversaries')
+    .select('*')
+    .eq('type', 1)
+    .order('target_date', { ascending: true });
 
-if (error || !data?.length) {
-  el.innerHTML = '';
-  return;
-}
+  if (error || !data?.length) return;
 
-const items = data.map(row => {
-  const { label, past } = calcDday(row.target_date);
-  return `
-    <li class="promise-item">
-      <div class="promise-info">
-        <strong>${escapeHtml(row.title)}</strong>
-        <span class="promise-date">${formatDate(row.target_date)}</span>
-      </div>
-      <span class="promise-dday${past ? ' past' : ''}">${label}</span>
-    </li>`;
-}).join('');
+  const items = data.map(row => {
+    const { label, past } = calcDday(row.target_date);
+    return `
+      <li class="promise-item">
+        <div class="promise-info">
+          <strong>${escapeHtml(row.title)}</strong>
+          <span class="promise-date">${formatDate(row.target_date)}</span>
+        </div>
+        <span class="promise-dday${past ? ' past' : ''}">${label}</span>
+      </li>`;
+  }).join('');
 
-el.innerHTML = `
-  <div class="card">
-    <p class="page-kicker">약속</p>
-    <h2>다가오는 날들</h2>
-    <ul class="promise-list">${items}</ul>
-  </div>`;
+  el.innerHTML = `
+    <div class="card">
+      <p class="page-kicker">약속</p>
+      <h2>다가오는 날들</h2>
+      <ul class="promise-list">${items}</ul>
+    </div>`;
+})();
