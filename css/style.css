@@ -1026,16 +1026,18 @@ html.dark .route-item {
   display: inline-block;
   font-size: 11px;
   line-height: 1;
-  color: var(--subtext);
-  opacity: 0.4;
+  color: #c0b8b5;
   cursor: pointer;
   user-select: none;
-  transition: color 0.2s, opacity 0.2s, transform 0.2s;
+  transition: color 0.2s, transform 0.2s;
+}
+
+html.dark .carousel-dot {
+  color: #6a6460;
 }
 
 .carousel-dot.active {
   color: var(--accent);
-  opacity: 1;
   transform: scale(1.3);
 }
 
