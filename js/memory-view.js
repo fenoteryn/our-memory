@@ -168,6 +168,7 @@ async function deleteMemory(){
 }
 
 function initCarousel(el) {
+  const viewport = el.querySelector('.carousel-viewport');
   const track = el.querySelector('.carousel-track');
   const dots = Array.from(el.querySelectorAll('.carousel-dot'));
   const slides = Array.from(track.children);
@@ -175,9 +176,9 @@ function initCarousel(el) {
 
   function syncHeight(index) {
     const img = slides[index]?.querySelector('img');
-    if (!img) return;
+    if (!img || !viewport) return;
     if (img.complete && img.naturalHeight) {
-      el.style.height = img.offsetHeight + 'px';
+      viewport.style.height = img.offsetHeight + 'px';
     }
   }
 
@@ -263,7 +264,9 @@ async function loadMemory() {
       ).join('');
       photoListEl.innerHTML = `
         <div class="photo-carousel">
-          <div class="carousel-track">${slides}</div>
+          <div class="carousel-viewport">
+            <div class="carousel-track">${slides}</div>
+          </div>
           <div class="carousel-dots">${dots}</div>
         </div>`;
       initCarousel(photoListEl.querySelector('.photo-carousel'));

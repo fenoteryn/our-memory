@@ -989,10 +989,13 @@ html.dark .route-item {
 
 .photo-carousel {
   position: relative;
-  overflow: hidden;
-  border-radius: 24px;
   margin: 14px 0 10px;
   touch-action: pan-y;
+}
+
+.carousel-viewport {
+  overflow: hidden;
+  border-radius: 24px;
   transition: height 0.3s ease;
 }
 
