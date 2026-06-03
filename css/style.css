@@ -620,6 +620,36 @@ header,
   overflow: hidden !important;
 }
 
+html.dark .fc {
+  background:
+    linear-gradient(180deg, rgba(43, 43, 43, 0.97), rgba(37, 33, 30, 0.95)),
+    var(--card);
+}
+
+html.dark .fc .fc-button {
+  background: rgba(56, 50, 70, 0.72) !important;
+}
+
+html.dark .fc .fc-daygrid-day {
+  background: rgba(43, 43, 43, 0.7);
+}
+
+html.dark .fc .fc-daygrid-day:hover {
+  background: rgba(56, 50, 70, 0.5);
+}
+
+html.dark .fc .fc-day-today {
+  background: rgba(58, 48, 37, 0.95) !important;
+}
+
+html.dark .fc .fc-day-other {
+  background: rgba(30, 30, 30, 0.5);
+}
+
+html.dark .fc .fc-day-other .fc-daygrid-day-number {
+  color: rgba(170, 164, 160, 0.4);
+}
+
 .memory-card {
   margin-top: 0;
   margin-bottom: 18px;
