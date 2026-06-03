@@ -48,38 +48,19 @@ function escapeHtml(v) {
 
     el.innerHTML = `
       <div class="card">
-        <div class="promise-header">
-          <div>
-            <p class="page-kicker">약속</p>
-            <h2>다가오는 날들</h2>
-          </div>
-          <button class="text-link" id="promiseAddBtn">+ 추가</button>
-        </div>
+        <p class="page-kicker">약속</p>
+        <h2>다가오는 날들</h2>
         <ul class="promise-list">${items}</ul>
-        <form class="promise-form" id="promiseForm" hidden>
+        <form class="promise-form" id="promiseForm">
           <input type="text" id="promiseTitle" placeholder="약속 제목" autocomplete="off">
           <input type="date" id="promiseDate">
           <div class="promise-form-actions">
             <button type="submit">저장</button>
-            <button type="button" id="promiseCancelBtn">취소</button>
           </div>
         </form>
       </div>`;
 
-    // 추가 토글
-    const addBtn = el.querySelector('#promiseAddBtn');
     const form = el.querySelector('#promiseForm');
-    const cancelBtn = el.querySelector('#promiseCancelBtn');
-
-    addBtn.addEventListener('click', () => {
-      form.hidden = !form.hidden;
-      if (!form.hidden) el.querySelector('#promiseTitle').focus();
-    });
-
-    cancelBtn.addEventListener('click', () => {
-      form.hidden = true;
-      form.reset();
-    });
 
     // 저장
     form.addEventListener('submit', async e => {
