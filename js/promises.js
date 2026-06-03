@@ -24,30 +24,85 @@ function escapeHtml(v) {
   const el = document.getElementById('promises');
   if (!el) return;
 
-  const { data, error } = await supabase
-    .from('anniversaries')
-    .select('*')
-    .eq('type', 1)
-    .order('target_date', { ascending: true });
+  async function load() {
+    const { data } = await supabase
+      .from('anniversaries')
+      .select('*')
+      .eq('type', 1)
+      .order('target_date', { ascending: true });
 
-  if (error || !data?.length) return;
+    const items = (data || []).map(row => {
+      const { label, past } = calcDday(row.target_date);
+      return `
+        <li class="promise-item">
+          <div class="promise-info">
+            <strong>${escapeHtml(row.title)}</strong>
+            <span class="promise-date">${formatDate(row.target_date)}</span>
+          </div>
+          <div class="promise-right">
+            <span class="promise-dday${past ? ' past' : ''}">${label}</span>
+            <button class="promise-delete" data-id="${row.id}" aria-label="삭제">×</button>
+          </div>
+        </li>`;
+    }).join('');
 
-  const items = data.map(row => {
-    const { label, past } = calcDday(row.target_date);
-    return `
-      <li class="promise-item">
-        <div class="promise-info">
-          <strong>${escapeHtml(row.title)}</strong>
-          <span class="promise-date">${formatDate(row.target_date)}</span>
+    el.innerHTML = `
+      <div class="card">
+        <div class="promise-header">
+          <div>
+            <p class="page-kicker">약속</p>
+            <h2>다가오는 날들</h2>
+          </div>
+          <button class="text-link" id="promiseAddBtn">+ 추가</button>
         </div>
-        <span class="promise-dday${past ? ' past' : ''}">${label}</span>
-      </li>`;
-  }).join('');
+        <ul class="promise-list">${items}</ul>
+        <form class="promise-form" id="promiseForm" hidden>
+          <input type="text" id="promiseTitle" placeholder="약속 제목" autocomplete="off">
+          <input type="date" id="promiseDate">
+          <div class="promise-form-actions">
+            <button type="submit">저장</button>
+            <button type="button" id="promiseCancelBtn">취소</button>
+          </div>
+        </form>
+      </div>`;
 
-  el.innerHTML = `
-    <div class="card">
-      <p class="page-kicker">약속</p>
-      <h2>다가오는 날들</h2>
-      <ul class="promise-list">${items}</ul>
-    </div>`;
+    // 추가 토글
+    const addBtn = el.querySelector('#promiseAddBtn');
+    const form = el.querySelector('#promiseForm');
+    const cancelBtn = el.querySelector('#promiseCancelBtn');
+
+    addBtn.addEventListener('click', () => {
+      form.hidden = !form.hidden;
+      if (!form.hidden) el.querySelector('#promiseTitle').focus();
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      form.hidden = true;
+      form.reset();
+    });
+
+    // 저장
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const title = el.querySelector('#promiseTitle').value.trim();
+      const date  = el.querySelector('#promiseDate').value;
+      if (!title || !date) return;
+      const { error } = await supabase.from('anniversaries').insert({ title, target_date: date, type: 1 });
+      if (error) { console.error(error); return; }
+      form.reset();
+      form.hidden = true;
+      await load();
+    });
+
+    // 삭제 (이벤트 위임)
+    el.querySelector('.promise-list').addEventListener('click', async e => {
+      const btn = e.target.closest('.promise-delete');
+      if (!btn) return;
+      const { error } = await supabase.from('anniversaries').delete().eq('id', btn.dataset.id);
+      if (error) { console.error(error); return; }
+      await load();
+    });
+  }
+
+  await load();
 })();
