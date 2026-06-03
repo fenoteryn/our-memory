@@ -189,17 +189,37 @@ async function loadMemory() {
   await loadPhotos(memoryId);
 }
 
-function makeStoragePath(userId, memId, file) {
-  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
-  return `${userId}/${memId}/${Date.now()}-${crypto.randomUUID()}.${ext}`;
+function makeStoragePath(userId, memId) {
+  return `${userId}/${memId}/${Date.now()}-${crypto.randomUUID()}.jpg`;
+}
+
+function compressImage(file, maxPx = 1200, quality = 0.82) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxPx || height > maxPx) {
+        if (width >= height) { height = Math.round(height * maxPx / width); width = maxPx; }
+        else { width = Math.round(width * maxPx / height); height = maxPx; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      canvas.toBlob(blob => resolve(new File([blob], file.name, { type: 'image/jpeg' })), 'image/jpeg', quality);
+    };
+    img.src = url;
+  });
 }
 
 async function uploadPhotos(userId, memId) {
   for (const file of Array.from(photosEl?.files || [])) {
-    const path = makeStoragePath(userId, memId, file);
-    const { error: upErr } = await supabase.storage.from('photos').upload(path, file, { cacheControl: '3600', upsert: false });
+    const compressed = await compressImage(file);
+    const path = makeStoragePath(userId, memId);
+    const { error: upErr } = await supabase.storage.from('photos').upload(path, compressed, { cacheControl: '3600', upsert: false });
     if (upErr) throw upErr;
-    // path만 저장 (signed URL은 표시 시점에 생성)
     const { error: insErr } = await supabase.from('photos').insert({ memory_id: memId, user_id: userId, photo_url: path });
     if (insErr) throw insErr;
   }
