@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가고 싶은 곳</title>
+<link rel="stylesheet" href="css/style.css">
+<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/theme.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="header-actions">
+    <button id="themeToggle">🌙</button>
+  </div>
+  <p class="page-kicker">Our Memory</p>
+  <h1>가고 싶은 곳</h1>
+</header>
+
+<div class="category-chips" id="catFilter">
+  <button class="cat-chip active" data-cat="">전체</button>
+  <button class="cat-chip" data-cat="카페">☕ 카페</button>
+  <button class="cat-chip" data-cat="음식점">🍽️ 음식점</button>
+  <button class="cat-chip" data-cat="공원">🌿 공원</button>
+  <button class="cat-chip" data-cat="소품샵">🛍️ 소품샵</button>
+  <button class="cat-chip" data-cat="영화관">🎬 영화관</button>
+  <button class="cat-chip" data-cat="오락실">🕹️ 오락실</button>
+  <button class="cat-chip" data-cat="쇼핑몰">🏬 쇼핑몰</button>
+  <button class="cat-chip" data-cat="기타">📍 기타</button>
+</div>
+
+<div class="spot-status-tabs" id="statusFilter">
+  <button class="spot-status-btn active" data-status="">전체</button>
+  <button class="spot-status-btn" data-status="false">미방문</button>
+  <button class="spot-status-btn" data-status="true">방문완료</button>
+</div>
+
+<div id="spotsList"></div>
+
+<button class="spots-fab" id="addSpotBtn">＋</button>
+
+<div class="sheet-overlay" id="sheetOverlay" hidden></div>
+<div class="add-sheet" id="addSheet">
+  <div class="sheet-handle"></div>
+  <h2 style="margin-bottom:18px">장소 추가</h2>
+
+  <label class="field-label">장소명 *</label>
+  <input type="text" id="spotName" placeholder="예) 연남동 카페">
+
+  <label class="field-label">카테고리</label>
+  <div class="category-chips" id="formCatChips">
+    <button class="cat-chip active" data-cat="카페">☕ 카페</button>
+    <button class="cat-chip" data-cat="음식점">🍽️ 음식점</button>
+    <button class="cat-chip" data-cat="공원">🌿 공원</button>
+    <button class="cat-chip" data-cat="소품샵">🛍️ 소품샵</button>
+    <button class="cat-chip" data-cat="영화관">🎬 영화관</button>
+    <button class="cat-chip" data-cat="오락실">🕹️ 오락실</button>
+    <button class="cat-chip" data-cat="쇼핑몰">🏬 쇼핑몰</button>
+    <button class="cat-chip" data-cat="기타">📍 기타</button>
+  </div>
+
+  <label class="field-label">주소</label>
+  <input type="text" id="spotAddress" placeholder="예) 서울 마포구 연남동">
+
+  <label class="field-label">카카오맵 URL</label>
+  <input type="url" id="spotMapUrl" placeholder="https://map.kakao.com/...">
+
+  <label class="field-label">메모</label>
+  <textarea id="spotNote" placeholder="가고 싶은 이유, 추천 메뉴 등" style="min-height:80px"></textarea>
+
+  <button id="saveSpotBtn" style="margin-top:16px">저장</button>
+  <p class="form-message" id="spotSaveMsg"></p>
+</div>
+
+<nav class="bottom-nav">
+  <a href="index.html">홈</a>
+  <a href="calendar.html">캘린더</a>
+  <a class="active" href="spots.html">장소</a>
+</nav>
+
+<script type="module" src="js/spots.js"></script>
+</body>
+</html>

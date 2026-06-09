@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>장소 상세</title>
+<link rel="stylesheet" href="css/style.css">
+<script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark');</script>
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/theme.js"></script>
+</head>
+<body>
+
+<header class="top-header">
+  <a class="text-link" href="spots.html">← 뒤로</a>
+  <button id="themeToggle">🌙</button>
+</header>
+
+<main id="spotDetail">
+  <p style="text-align:center;color:var(--subtext);margin-top:60px;font-weight:700">불러오는 중...</p>
+</main>
+
+<nav class="bottom-nav">
+  <a href="index.html">홈</a>
+  <a href="calendar.html">캘린더</a>
+  <a class="active" href="spots.html">장소</a>
+</nav>
+
+<script type="module" src="js/spot-detail.js"></script>
+</body>
+</html>
